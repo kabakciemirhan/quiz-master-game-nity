@@ -6,18 +6,42 @@ using TMPro; //textmeshpro componentini çekiyoruz.
 
 public class QuizManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI questionText;
-    [SerializeField] QuestionSO questionSO;
-    [SerializeField] GameObject[] answerButtons;
-
-    int correctAnswerIndex;
-    [SerializeField] Sprite defaultAnswerSprite; //varsayılan butonun arkaplan resmi
-    [SerializeField] Sprite correctAnswerSprite; //doğru cevabın arkaplan resmi
+    [Header("Questions")]
+        [SerializeField] TextMeshProUGUI questionText;
+        [SerializeField] QuestionSO questionSO;
+    [Header("Answers")]
+        [SerializeField] GameObject[] answerButtons;
+        int correctAnswerIndex;
+        bool hasAnswerEarly; //soru daha önceden cevaplandı mı?
+    [Header("Buttons")]
+        [SerializeField] Sprite defaultAnswerSprite; //varsayılan butonun arkaplan resmi
+        [SerializeField] Sprite correctAnswerSprite; //doğru cevabın arkaplan resmi
+    [Header("Timer")]
+        [SerializeField] Image timerImage;
+        TimeManager timer;
 
     void Start()
     {
+        timer = FindObjectOfType<TimeManager>();
         //DisplayQuestion();
         GoNextQuestion();
+    }
+
+    void Update()
+    {
+        //zamanı sprite ile eşle
+        timerImage.fillAmount = timer.fillFraction;
+        if(timer.loadNextQuestion)
+        {
+            hasAnswerEarly = false;
+            GoNextQuestion(); //diğer soruya git
+            timer.loadNextQuestion = false; //ve yeni soruya geçme bool unu tekrar sıfırla.
+        }
+        else if(!hasAnswerEarly && !timer.isAnsweringQuestion) //cevap önceden verilmediyse
+        {
+            DisplayAnswer(-1); //-1 diyerek otomatik olarak else değerini döndüreceğiz.
+            SetButtonState(false);
+        }
     }
 
     //soruyu gösterme kodlarını metot içerisine aldık
@@ -32,6 +56,14 @@ public class QuizManager : MonoBehaviour
     }
 
     public void OnAnswerSelected(int index)
+    {
+        hasAnswerEarly = true;
+        DisplayAnswer(index);
+        SetButtonState(false);
+        timer.CancelTimer(); //bu kısmı anlamadım. cevap seçilince neden zaman duruyor anlamadım çünkü gameplay de zaman durmuyor
+    }
+
+    void DisplayAnswer(int index)
     {
         Image buttonImage;
         if(index == questionSO.GetCorrectAnswerIndex()) //eğer cevap doğruysa
@@ -53,7 +85,6 @@ public class QuizManager : MonoBehaviour
             buttonImage.sprite = correctAnswerSprite;
         }
         //cevap seçildikten sonra butonun kullanılabilirliğini kapatıyoruz.
-        SetButtonState(false);
     }
 
     void GoNextQuestion()
