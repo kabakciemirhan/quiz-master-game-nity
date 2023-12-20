@@ -8,7 +8,7 @@ public class QuizManager : MonoBehaviour
 {
     [Header("Questions")]
         [SerializeField] TextMeshProUGUI questionText;
-        [SerializeField] QuestionSO questionSO;
+        currentQuestionSO currentQuestionSO;
     [Header("Answers")]
         [SerializeField] GameObject[] answerButtons;
         int correctAnswerIndex;
@@ -47,11 +47,11 @@ public class QuizManager : MonoBehaviour
     //soruyu gösterme kodlarını metot içerisine aldık
     void DisplayQuestion()
     {
-        questionText.text = questionSO.GetQuestion();
+        questionText.text = currentQuestionSO.GetQuestion();
         for (int i = 0; i < answerButtons.Length; i++)
         {
             TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>(); //butonu al, buton içindeki child objesini yani doğal olarak texti al ve değiştir.
-            buttonText.text = questionSO.GetAnswer(i);
+            buttonText.text = currentQuestionSO.GetAnswer(i);
         }
     }
 
@@ -66,11 +66,11 @@ public class QuizManager : MonoBehaviour
     void DisplayAnswer(int index)
     {
         Image buttonImage;
-        if(index == questionSO.GetCorrectAnswerIndex()) //eğer cevap doğruysa
+        if(index == currentQuestionSO.GetCorrectAnswerIndex()) //eğer cevap doğruysa
         {
             questionText.text = "Correct!"; //soru yazısını değiştir
             buttonImage = answerButtons[index].GetComponent<Image>(); //butonların arkaplan resmini çek
-            buttonImage.sprite = correctAnswerSprite; //eğer doğru cevap index == questionso.getcorr.... şeklinde ise doğru cevap sprite'ını arkaplan yap.
+            buttonImage.sprite = correctAnswerSprite; //eğer doğru cevap index == currentQuestionSO.getcorr.... şeklinde ise doğru cevap sprite'ını arkaplan yap.
         }
         else //eğer cevap yanlışsa
         {
@@ -78,8 +78,8 @@ public class QuizManager : MonoBehaviour
             Image buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>(); //doğru olan cevabı correctanswer sprite ı ile çevreliyoruz
             buttonImage.sprite = correctAnswerSprite; */
             //yukarıda yaptığım da doğru ama aşağıda kursta yapılan kod var o yüzden üst tarafı yorum satırına aldım.
-            correctAnswerIndex = questionSO.GetCorrectAnswerIndex();
-            string correctanswer = questionSO.GetAnswer(correctAnswerIndex);
+            correctAnswerIndex = currentQuestionSO.GetCorrectAnswerIndex();
+            string correctanswer = currentQuestionSO.GetAnswer(correctAnswerIndex);
             questionText.text = "Sorry, the correct answer was;\n" + correctanswer;
             buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
