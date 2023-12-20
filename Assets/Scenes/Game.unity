@@ -1426,7 +1426,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questionText: {fileID: 503801163}
-  questionSO: {fileID: 11400000, guid: ca60d0b9c1bba40b49c6ddb10592e6ca, type: 2}
+  questions:
+  - {fileID: 11400000, guid: ec7c572d851a54099912cd007cb1d011, type: 2}
+  - {fileID: 11400000, guid: ebbc4d56f80fc40c3ba45b3120282dc7, type: 2}
+  - {fileID: 11400000, guid: e77d44bb0fcf94347b4a808624bd76cf, type: 2}
+  - {fileID: 11400000, guid: 426bd3250db294f83a999ee6e48b1c84, type: 2}
+  - {fileID: 11400000, guid: ca60d0b9c1bba40b49c6ddb10592e6ca, type: 2}
   answerButtons:
   - {fileID: 1642431028}
   - {fileID: 528906427}
@@ -1434,7 +1439,7 @@ MonoBehaviour:
   - {fileID: 372099933}
   defaultAnswerSprite: {fileID: 21300000, guid: 49afa69df312544b599229d461c28431, type: 3}
   correctAnswerSprite: {fileID: 21300000, guid: dd0a412e43c15494982492b7e6ed2cbe, type: 3}
-  timerImage: {fileID: 0}
+  timerImage: {fileID: 807136706}
 --- !u!1 &1642431028 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8233572171976718806, guid: 5d601492459694a02a97d0da5dfc8e4a, type: 3}

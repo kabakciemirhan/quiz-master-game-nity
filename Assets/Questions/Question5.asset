@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   question: What is a variable?
   answers:
-  - 
-  - 
-  - 
-  - 
+  - 'this is '
+  - nope
+  - nope
+  - nope
   correctAnswerIndex: 0

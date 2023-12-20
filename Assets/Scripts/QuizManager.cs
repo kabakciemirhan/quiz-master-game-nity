@@ -8,7 +8,8 @@ public class QuizManager : MonoBehaviour
 {
     [Header("Questions")]
         [SerializeField] TextMeshProUGUI questionText;
-        currentQuestionSO currentQuestionSO;
+        [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
+        QuestionSO currentQuestionSO;
     [Header("Answers")]
         [SerializeField] GameObject[] answerButtons;
         int correctAnswerIndex;
@@ -23,8 +24,6 @@ public class QuizManager : MonoBehaviour
     void Start()
     {
         timer = FindObjectOfType<TimeManager>();
-        //DisplayQuestion();
-        GoNextQuestion();
     }
 
     void Update()
@@ -89,11 +88,22 @@ public class QuizManager : MonoBehaviour
 
     void GoNextQuestion()
     {
-        SetButtonState(true);
-        SetDefaultButtonSprites();
-        DisplayQuestion();
+        if(questions.Count > 0) //soru sayımız 0 dan fazla ise
+        {
+            SetButtonState(true);
+            SetDefaultButtonSprites();
+            GetRandomQuestion();
+            DisplayQuestion();
+        }
     }
 
+    void GetRandomQuestion()
+    {
+        int index = Random.Range(0, questions.Count); //kaç soru varsa aralarından rastgele olarak döndürecek
+        currentQuestionSO = questions[index];
+        if(questions.Contains(currentQuestionSO)) //eğer şimdiki soru listede varsa...
+            questions.Remove(currentQuestionSO); //soru görülünce o soruyu listeden sil ki bir daha çıkmasın
+    }
     //yeni soruya geçince sprite lar sıfırlanmalı
     void SetDefaultButtonSprites()
     {
