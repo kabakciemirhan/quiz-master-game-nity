@@ -20,10 +20,14 @@ public class QuizManager : MonoBehaviour
     [Header("Timer")]
         [SerializeField] Image timerImage;
         TimeManager timer;
+    [Header("Scoring")]
+        [SerializeField] TextMeshProUGUI scoreText;
+        ScoreManager scoreKeeper;
 
     void Start()
     {
         timer = FindObjectOfType<TimeManager>();
+        scoreKeeper = FindObjectOfType<ScoreManager>();
     }
 
     void Update()
@@ -60,6 +64,7 @@ public class QuizManager : MonoBehaviour
         DisplayAnswer(index);
         SetButtonState(false);
         timer.CancelTimer(); //bu kısmı anlamadım. cevap seçilince neden zaman duruyor anlamadım çünkü gameplay de zaman durmuyor
+        scoreText.text = "Score: " + scoreKeeper.CalculateScore() + "%"; //cevabı seçince skorumuz işleyecek.
     }
 
     void DisplayAnswer(int index)
@@ -70,6 +75,7 @@ public class QuizManager : MonoBehaviour
             questionText.text = "Correct!"; //soru yazısını değiştir
             buttonImage = answerButtons[index].GetComponent<Image>(); //butonların arkaplan resmini çek
             buttonImage.sprite = correctAnswerSprite; //eğer doğru cevap index == currentQuestionSO.getcorr.... şeklinde ise doğru cevap sprite'ını arkaplan yap.
+            scoreKeeper.IncrementCorrectAnswers(); //doğru cevap skoru artırır
         }
         else //eğer cevap yanlışsa
         {
@@ -94,6 +100,7 @@ public class QuizManager : MonoBehaviour
             SetDefaultButtonSprites();
             GetRandomQuestion();
             DisplayQuestion();
+            scoreKeeper.IncrementQuestionSeen(); //diğer soruya geçmek, görülen soru sayısını artırır
         }
     }
 
