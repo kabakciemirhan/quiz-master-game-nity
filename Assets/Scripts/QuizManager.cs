@@ -23,11 +23,16 @@ public class QuizManager : MonoBehaviour
     [Header("Scoring")]
         [SerializeField] TextMeshProUGUI scoreText;
         ScoreManager scoreKeeper;
+    [Header("ProgressBar")]
+        [SerializeField] Slider progressBar; //slider ımızı içeri alıyoruz.
+    public bool isQuizComplete;
 
     void Start()
     {
         timer = FindObjectOfType<TimeManager>();
         scoreKeeper = FindObjectOfType<ScoreManager>();
+        progressBar.maxValue = questions.Count; //soruların toplam sayısını slider'ın max değerine eşitledik
+        progressBar.value = 0; //baştaki değer 0.
     }
 
     void Update()
@@ -65,6 +70,12 @@ public class QuizManager : MonoBehaviour
         SetButtonState(false);
         timer.CancelTimer(); //bu kısmı anlamadım. cevap seçilince neden zaman duruyor anlamadım çünkü gameplay de zaman durmuyor
         scoreText.text = "Score: " + scoreKeeper.CalculateScore() + "%"; //cevabı seçince skorumuz işleyecek.
+
+        if(progressBar.value == progressBar.maxValue)
+        {
+            //slider değeri fullenirse, yani çözülen sorular biterse aşağıdaki değeri true yap
+            isQuizComplete = true;
+        }
     }
 
     void DisplayAnswer(int index)
@@ -100,6 +111,7 @@ public class QuizManager : MonoBehaviour
             SetDefaultButtonSprites();
             GetRandomQuestion();
             DisplayQuestion();
+            progressBar.value++; //her soru çözülüşte progressbar değeri bir artıyor.
             scoreKeeper.IncrementQuestionSeen(); //diğer soruya geçmek, görülen soru sayısını artırır
         }
     }
