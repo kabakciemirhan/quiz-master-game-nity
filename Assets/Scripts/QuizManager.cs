@@ -16,8 +16,14 @@ public class QuizManager : MonoBehaviour
 
     void Start()
     {
-        questionText.text = questionSO.GetQuestion();
+        //DisplayQuestion();
+        GoNextQuestion();
+    }
 
+    //soruyu gösterme kodlarını metot içerisine aldık
+    void DisplayQuestion()
+    {
+        questionText.text = questionSO.GetQuestion();
         for (int i = 0; i < answerButtons.Length; i++)
         {
             TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>(); //butonu al, buton içindeki child objesini yani doğal olarak texti al ve değiştir.
@@ -45,6 +51,35 @@ public class QuizManager : MonoBehaviour
             questionText.text = "Sorry, the correct answer was;\n" + correctanswer;
             buttonImage = answerButtons[correctAnswerIndex].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
+        }
+        //cevap seçildikten sonra butonun kullanılabilirliğini kapatıyoruz.
+        SetButtonState(false);
+    }
+
+    void GoNextQuestion()
+    {
+        SetButtonState(true);
+        SetDefaultButtonSprites();
+        DisplayQuestion();
+    }
+
+    //yeni soruya geçince sprite lar sıfırlanmalı
+    void SetDefaultButtonSprites()
+    {
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Image buttonImage = answerButtons[i].GetComponent<Image>();
+            buttonImage.sprite = defaultAnswerSprite;
+        }
+    }
+
+    //butonun açılıp kapanma durumunu kontrol altına aldık
+    void SetButtonState(bool butonDurum)
+    {
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+            Button button = answerButtons[i].GetComponent<Button>();
+            button.interactable = butonDurum;
         }
     }
 }
