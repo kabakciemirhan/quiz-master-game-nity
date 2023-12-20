@@ -13,7 +13,7 @@ public class QuizManager : MonoBehaviour
     [Header("Answers")]
         [SerializeField] GameObject[] answerButtons;
         int correctAnswerIndex;
-        bool hasAnswerEarly; //soru daha önceden cevaplandı mı?
+        bool hasAnswerEarly = true; //soru daha önceden cevaplandı mı?
     [Header("Buttons")]
         [SerializeField] Sprite defaultAnswerSprite; //varsayılan butonun arkaplan resmi
         [SerializeField] Sprite correctAnswerSprite; //doğru cevabın arkaplan resmi
@@ -27,7 +27,7 @@ public class QuizManager : MonoBehaviour
         [SerializeField] Slider progressBar; //slider ımızı içeri alıyoruz.
     public bool isQuizComplete;
 
-    void Start()
+    void Awake()
     {
         timer = FindObjectOfType<TimeManager>();
         scoreKeeper = FindObjectOfType<ScoreManager>();
@@ -41,6 +41,12 @@ public class QuizManager : MonoBehaviour
         timerImage.fillAmount = timer.fillFraction;
         if(timer.loadNextQuestion)
         {
+            if(progressBar.value == progressBar.maxValue)
+            {
+                //slider değeri fullenirse, yani çözülen sorular biterse aşağıdaki değeri true yap
+                isQuizComplete = true;
+                return;
+            }
             hasAnswerEarly = false;
             GoNextQuestion(); //diğer soruya git
             timer.loadNextQuestion = false; //ve yeni soruya geçme bool unu tekrar sıfırla.
@@ -70,12 +76,6 @@ public class QuizManager : MonoBehaviour
         SetButtonState(false);
         timer.CancelTimer(); //bu kısmı anlamadım. cevap seçilince neden zaman duruyor anlamadım çünkü gameplay de zaman durmuyor
         scoreText.text = "Score: " + scoreKeeper.CalculateScore() + "%"; //cevabı seçince skorumuz işleyecek.
-
-        if(progressBar.value == progressBar.maxValue)
-        {
-            //slider değeri fullenirse, yani çözülen sorular biterse aşağıdaki değeri true yap
-            isQuizComplete = true;
-        }
     }
 
     void DisplayAnswer(int index)
